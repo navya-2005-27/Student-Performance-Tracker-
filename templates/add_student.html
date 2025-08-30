@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h4 class="mb-3">Add Student</h4>
+    <form method="post" class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Full Name</label>
+        <input name="name" class="form-control" required maxlength="80" placeholder="e.g., Aanya Verma">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Roll Number</label>
+        <input name="roll_number" class="form-control" required maxlength="20" placeholder="e.g., 23CS014">
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary">Save</button>
+        <a href="{{ url_for('students') }}" class="btn btn-link">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

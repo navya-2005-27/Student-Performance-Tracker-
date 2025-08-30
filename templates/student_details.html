@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h4>{{ student.name }}</h4>
+        <div class="text-muted">Roll: {{ student.roll_number }}</div>
+        <hr>
+        <div class="d-flex justify-content-between">
+          <div class="text-muted">Average</div>
+          <div class="fw-bold">{{ "%.2f"|format(avg) }}</div>
+        </div>
+        <a class="btn btn-outline-primary mt-3" href="{{ url_for('add_grade') }}">Add / Update Grade</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="mb-3">Grades</h5>
+        <div class="table-responsive">
+          <table class="table table-sm table-striped">
+            <thead><tr><th>Subject</th><th>Grade</th></tr></thead>
+            <tbody>
+              {% for subject, grade in student.grades.items() %}
+                <tr><td>{{ subject }}</td><td>{{ grade }}</td></tr>
+              {% else %}
+                <tr><td colspan="2" class="text-muted">No grades yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h4 class="mb-3">Subject Analytics</h4>
+    <form method="post" class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Subject</label>
+        <input name="subject" class="form-control" required placeholder="e.g., Physics">
+      </div>
+      <div class="col-md-6 d-flex align-items-end">
+        <button class="btn btn-primary">Show Insights</button>
+      </div>
+    </form>
+    {% if result %}
+      <hr>
+      <h5 class="mb-3">{{ result.subject }} — Insights</h5>
+      <p><strong>Class Average:</strong> {{ "%.2f"|format(result.avg) }}</p>
+      {% if result.topper %}
+        <p><strong>Topper:</strong> {{ result.topper.name }} ({{ result.topper.roll_number }}) — {{ result.topper.grade }}</p>
+      {% else %}
+        <p class="text-muted">No topper found (no grades yet).</p>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

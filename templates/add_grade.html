@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h4 class="mb-3">Add / Update Grade</h4>
+    <form method="post" class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">Roll Number</label>
+        <input name="roll_number" class="form-control" required placeholder="23CS014">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Subject</label>
+        <input name="subject" class="form-control" required placeholder="Mathematics">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Grade (0-100)</label>
+        <input name="grade" type="number" min="0" max="100" class="form-control" required>
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary">Save Grade</button>
+        <a href="{{ url_for('students') }}" class="btn btn-link">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
