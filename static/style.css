@@ -1,7 +1,81 @@
-/* clean, app-like feel */
-body { background: #f6f8fb; }
-.card-hero {
-  background: linear-gradient(135deg, #0d6efd22, #20c99722);
-  border: 1px solid #e9ecef;
+body {
+  background: linear-gradient(125deg, #F8FFAE, #43C6AC);
+  color: #d0e8ff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-.table td, .table th { vertical-align: middle; }
+.card-hero {
+  background: linear-gradient(135deg, #0d6efd44, #20c99744);
+  border: 2px solid #81a5c8;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+.card-hero:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+}
+.table {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.table td, .table th {
+  vertical-align: middle;
+  padding: 15px;
+  border-bottom: 1px solid rgba(129, 165, 200, 0.3);
+  color: #111212;
+}
+.table th {
+  background: rgba(13, 110, 253, 0.3);
+  font-weight: bold;
+}
+
+.btn-delete {
+  background: linear-gradient(135deg, #ff4d4d, #ff1a1a);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+.btn-delete:hover {
+  background: linear-gradient(135deg, #ff1a1a, #ff4d4d);
+  transform: scale(1.05);
+
+}
+
+
+.btn-primary {
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+.btn-primary.delete-btn{
+  color: #000;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #6610f2, #0d6efd);
+  transform: scale(1.05);
+}
+.hero-image img {
+  border-radius: 12px;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeIn 2s forwards;
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+.navbar {
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid #81a5c8;
+}
+.footer {
+  background: linear-gradient(135deg, #0a1929, #445e84);
+  color: #b0c4de;
+}
+@media (max-width: 768px) {
+  .card-hero { margin: 10px; }
+  .table { font-size: 0.9em; }
+}

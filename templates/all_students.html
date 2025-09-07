@@ -20,12 +20,17 @@
       </tr>
     </thead>
     <tbody>
+      
       {% for s in students %}
       <tr>
         <td class="fw-semibold">{{ s.roll_number }}</td>
         <td>{{ s.name }}</td>
-        <td class="text-end">
+        <td class="text-end d-flex justify-content-end gap-2">
           <a class="btn btn-sm btn-primary" href="{{ url_for('student_details', roll_number=s.roll_number) }}">View</a>
+          <form method="POST" action="{{ url_for('delete_student', roll_number=s.roll_number) }}" onsubmit="return confirm('Are you sure you want to delete this student?');">
+            <button type="submit" class="btn btn-sm btn-delete btn-danger">Delete</button>
+          </form>
+          
         </td>
       </tr>
       {% else %}
