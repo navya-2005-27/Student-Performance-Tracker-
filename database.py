@@ -1,4 +1,3 @@
-# database.py
 import os
 import sqlite3
 from pathlib import Path
@@ -12,11 +11,12 @@ except Exception:
 
 DB_PATH = Path("students.db")
 
+
 def get_connection():
     DATABASE_URL = os.getenv("DATABASE_URL")
     if DATABASE_URL and psycopg2:
-        # connect to Postgres; override .cursor to return RealDictCursor by default
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+
         def cursor(*args, **kwargs):
             return conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         conn.cursor = cursor
@@ -25,6 +25,7 @@ def get_connection():
         conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         return conn
+
 
 def init_db():
     conn = get_connection()

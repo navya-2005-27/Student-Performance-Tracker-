@@ -1,10 +1,15 @@
 # services.py
+from database import get_db
 from typing import List, Tuple, Dict, Optional
-import csv, json, io
+import csv
+import json
+import io
 from database import get_connection
 from models import Student
 
 # ---------- Helper validations ----------
+
+
 def validate_roll(roll: str) -> str:
     roll = roll.strip()
     if not roll:
@@ -12,6 +17,7 @@ def validate_roll(roll: str) -> str:
     if len(roll) > 20:
         raise ValueError("Roll number too long.")
     return roll
+
 
 def validate_name(name: str) -> str:
     name = " ".join(name.strip().split())
@@ -21,13 +27,15 @@ def validate_name(name: str) -> str:
         raise ValueError("Name too long.")
     return name
 
+
 def validate_subject(sub: str) -> str:
     sub = " ".join(sub.strip().title().split())
     if not sub:
         raise ValueError("Subject is required.")
     if len(sub) > 60:
         raise ValueError("Subject too long.")
-    return sub 
+    return sub
+
 
 def validate_grade(grade_str: str) -> int:
     try:
@@ -39,16 +47,20 @@ def validate_grade(grade_str: str) -> int:
     return grade
 
 # ---------- Student operations (DB) ----------
+
+
 def add_student_db(name: str, roll_number: str) -> None:
     name = validate_name(name)
     roll_number = validate_roll(roll_number)
     conn = get_connection()
     cur = conn.cursor()
     try:
-        cur.execute("INSERT INTO students (roll_number, name) VALUES (?, ?)", (roll_number, name))
+        cur.execute(
+            "INSERT INTO students (roll_number, name) VALUES (?, ?)", (roll_number, name))
         conn.commit()
     finally:
         conn.close()
+
 
 def list_students_db() -> List[Dict]:
     conn = get_connection()
@@ -68,32 +80,25 @@ def delete_student_db(roll_number):
     db.commit()
 
 
-def delete_student_db(roll_number: str) -> None:
-    roll_number = validate_roll(roll_number)
-    conn = get_connection()
-    cur = conn.cursor()
-    # Just delete student; grades deleted automatically via ON DELETE CASCADE
-    cur.execute("DELETE FROM students WHERE roll_number = ?", (roll_number,))
-    conn.commit()
-    conn.close()
-
-
 def get_student_db(roll_number: str) -> Optional[Dict]:
     roll_number = validate_roll(roll_number)
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("SELECT roll_number, name FROM students WHERE roll_number = ?", (roll_number,))
+    cur.execute(
+        "SELECT roll_number, name FROM students WHERE roll_number = ?", (roll_number,))
     row = cur.fetchone()
     if not row:
         conn.close()
         return None
-    cur.execute("SELECT subject, grade FROM grades WHERE roll_number = ? ORDER BY subject", (roll_number,))
+    cur.execute(
+        "SELECT subject, grade FROM grades WHERE roll_number = ? ORDER BY subject", (roll_number,))
     grades = [dict(r) for r in cur.fetchall()]
     conn.close()
     st = Student(row["name"], row["roll_number"])
     for g in grades:
         st.grades[g["subject"]] = g["grade"]
     return st.to_dict()
+
 
 def add_grade_db(roll_number: str, subject: str, grade: int) -> None:
     roll_number = validate_roll(roll_number)
@@ -114,23 +119,28 @@ def add_grade_db(roll_number: str, subject: str, grade: int) -> None:
     conn.commit()
     conn.close()
 
+
 def compute_student_average(roll_number: str) -> float:
     roll_number = validate_roll(roll_number)
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("SELECT AVG(grade) AS avg FROM grades WHERE roll_number=?", (roll_number,))
+    cur.execute(
+        "SELECT AVG(grade) AS avg FROM grades WHERE roll_number=?", (roll_number,))
     row = cur.fetchone()
     conn.close()
     return round(row["avg"] or 0.0, 2)
+
 
 def class_average_db(subject: str) -> float:
     subject = validate_subject(subject)
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("SELECT AVG(grade) AS avg FROM grades WHERE subject=?", (subject,))
+    cur.execute(
+        "SELECT AVG(grade) AS avg FROM grades WHERE subject=?", (subject,))
     row = cur.fetchone()
     conn.close()
     return round(row["avg"] or 0.0, 2)
+
 
 def subject_topper_db(subject: str) -> Optional[Dict]:
     subject = validate_subject(subject)
@@ -149,6 +159,8 @@ def subject_topper_db(subject: str) -> Optional[Dict]:
     return dict(row) if row else None
 
 # ---------- Save data locally (CSV / JSON downloads) ----------
+
+
 def export_csv() -> bytes:
     conn = get_connection()
     cur = conn.cursor()
@@ -164,8 +176,10 @@ def export_csv() -> bytes:
     writer = csv.writer(buf)
     writer.writerow(["roll_number", "name", "subject", "grade"])
     for r in rows:
-        writer.writerow([r["roll_number"], r["name"], r["subject"] or "", r["grade"] if r["grade"] is not None else ""])
+        writer.writerow([r["roll_number"], r["name"], r["subject"]
+                        or "", r["grade"] if r["grade"] is not None else ""])
     return buf.getvalue().encode("utf-8")
+
 
 def export_json() -> bytes:
     data = []
